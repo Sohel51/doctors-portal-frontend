@@ -1,4 +1,3 @@
-import './App.css';
 import { Routes, Route} from "react-router-dom";
 import Navbar from './Pages/Shared/Navbar';
 import Home from './Pages/Home/Home';
@@ -7,6 +6,7 @@ import Appointment from './Pages/Appointment/Appointment';
 import Review from './Pages/Review/Review';
 import ContactUs from './Pages/ContactUs/ContactUs';
 import Login from './Pages/Auth/Login';
+import Footer from "./Pages/Shared/Footer";
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/contact" element={<ContactUs></ContactUs>}></Route>
         <Route path="/login" element={<Login></Login>}></Route>
       </Routes>
+      <Footer></Footer>
     </div>
   );
 }
