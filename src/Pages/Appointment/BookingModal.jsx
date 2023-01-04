@@ -1,8 +1,11 @@
 import { format } from 'date-fns';
 import React from 'react'
+import { useAuthState } from 'react-firebase-hooks/auth';
+import auth from '../../firebase.init';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
     const { _id, name, slots } = treatment;
+    const [user, loading] = useAuthState(auth);
 
     const handleBooking = event =>{
         event.preventDefault();
@@ -25,18 +28,18 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
                         <div className="mb-4">
                             <select name="slot" className="select select-bordered w-full">
                                 {
-                                    slots.map(slot => <option value={slot}>{slot}</option>)
+                                    slots.map((slot, index) => <option key={index} value={slot}>{slot}</option>)
                                 }
                             </select>
                         </div>
                         <div className="mb-4">
-                            <input name='name' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Full Name" />
+                            <input name='name' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" disabled value={user?.displayName || ''}  />
+                        </div>
+                        <div className="mb-4">
+                            <input name='email' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" disabled value={user?.email || ''} />
                         </div>
                         <div className="mb-4">
                             <input name='phone' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" placeholder="Phone Number" />
-                        </div>
-                        <div className="mb-4">
-                            <input name='email' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" placeholder="Email" />
                         </div>
                         <div className="mb-4">
                             <button className="btn btn-info uppercase w-full text-white font-bold bg-gradient-to-r from-cyan-500 to-blue-400">Submit</button>
