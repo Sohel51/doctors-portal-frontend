@@ -11,7 +11,7 @@ const MyAppointment = () => {
 
     useEffect(() => {
         if (user) {
-            fetch(`http://localhost:5000/booking?patient=${user.email}`)
+            fetch(`https://doctors-portal-server-co6m.onrender.com/booking?patient=${user.email}`)
                 .then(res => res.json())
                 .then(data => setAppointments(data));
         }

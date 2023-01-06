@@ -25,7 +25,7 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
         }
 
         // Sending the data in Backend (using fetch)
-        fetch('http://localhost:5000/booking', {
+        fetch('https://doctors-portal-server-co6m.onrender.com/booking', {
             method: 'POST', // the method name use for sending the data
             headers: {
                 'content-type': 'application/json' // which format we send the data

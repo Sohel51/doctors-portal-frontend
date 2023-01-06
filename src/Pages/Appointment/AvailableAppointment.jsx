@@ -9,7 +9,7 @@ const AvailableAppointment = ({ date }) => {
 
     const formattedDate = format(date, 'PP');
     useEffect(() => {
-        fetch(`http://localhost:5000/available?date=${formattedDate}`)
+        fetch(`https://doctors-portal-server-co6m.onrender.com/available?date=${formattedDate}`)
             .then(res => res.json())
             .then(data => setServices(data));
     });
