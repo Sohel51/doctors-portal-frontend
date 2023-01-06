@@ -2,16 +2,45 @@ import { format } from 'date-fns';
 import React from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import auth from '../../firebase.init';
+import { toast } from 'react-toastify';
 
 const BookingModal = ({ treatment, date, setTreatment }) => {
     const { _id, name, slots } = treatment;
     const [user, loading] = useAuthState(auth);
+    const formattedDate = format(date, 'PP');
+    const notify = () => toast("Wow so easy!");
 
-    const handleBooking = event =>{
+    const handleBooking = event => {
         event.preventDefault();
         const slot = event.target.slot.value;
-        console.log(_id, name, slot);
-        setTreatment(null);
+
+        const booking = {
+            treatmentId: _id,
+            treatment: name,
+            date: formattedDate,
+            slot,
+            patient: user.email,
+            patientName: user.displayName,
+            phone: event.target.phone.value,
+        }
+
+        // Sending the data in Backend (using fetch)
+        fetch('http://localhost:5000/booking', {
+            method: 'POST', // the method name use for sending the data
+            headers: {
+                'content-type': 'application/json' // which format we send the data
+            },
+            body: JSON.stringify(booking) // sending the data
+        })
+            .then(res => res.json()) // convert the data in json
+            .then(data => {
+                if(data.success){
+                    toast(`Appointment is set, ${formattedDate} at ${slot}`)
+                }else{
+                    toast.error(`Already have an Appointment on ${data.booking?.date} at ${data.booking?.slot}`)
+                }
+                setTreatment(null); // to close the modal
+            });
     }
 
     return (
@@ -33,7 +62,7 @@ const BookingModal = ({ treatment, date, setTreatment }) => {
                             </select>
                         </div>
                         <div className="mb-4">
-                            <input name='name' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" disabled value={user?.displayName || ''}  />
+                            <input name='name' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" disabled value={user?.displayName || ''} />
                         </div>
                         <div className="mb-4">
                             <input name='email' className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="email" disabled value={user?.email || ''} />
